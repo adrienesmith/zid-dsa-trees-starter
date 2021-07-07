@@ -1,3 +1,5 @@
+const Queue = require("./Queue"); 
+
 class BinarySearchTree {
   constructor(key = null, value = null, parent = null) {
     this.key = key;
@@ -147,6 +149,33 @@ class BinarySearchTree {
     if (this.right) {
       values = this.right.dfsPreOrder(values);
     }
+    return values;
+  }
+
+  bfs(tree, values = []) {
+    // create a new queue
+    const queue = new Queue();
+    // start the traversal at the tree and add the tree node to the queue
+    // this kicks-off the BFS
+    queue.enqueue(tree);
+    // remove from the queue
+    let node = queue.dequeue();
+    // while node has a value
+    while (node) {
+      // add that value from the queue to the array
+      values.push(node.value);
+      // if node has a left child, add it to the queue
+      if (node.left) {
+        queue.enqueue(node.left);
+      }
+      // if node has a right child, add it to the queue
+      if (node.right) {
+        queue.enqueue(node.right);
+      }
+      // set the node to the next item in the queue
+      node = queue.dequeue();
+    }
+    // return the array of values once breadth-traversal is complete
     return values;
   }
 }
