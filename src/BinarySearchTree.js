@@ -178,4 +178,58 @@ class BinarySearchTree {
     // return the array of values once breadth-traversal is complete
     return values;
   }
+
+  getHeight(currentHeight = 0) {
+    // BASE CASE:
+    // If the current node doesn't have a left or right child
+    // the base case is reached, and the function can return the height
+    if (!this.left && !this.right) return currentHeight;
+
+    // RECURSIVE CASE:
+    // Otherwise, compute new height
+    const newHeight = currentHeight + 1;
+
+    // If there's no left child, recurse down the right subtree only
+    // passing down the height of the current node
+    if (!this.left) return this.right.getHeight(newHeight);
+
+    // If there's no right child, recurse down the left subtree only
+    // passing down the height of the current node
+    if (!this.right) return this.left.getHeight(newHeight);
+
+    // If both children exist, recurse down both subtrees
+    // passing down the height of the current node
+    const leftHeight = this.left.getHeight(newHeight);
+    const rightHeight = this.right.getHeight(newHeight);
+
+    // return the greater of the left / right heights
+    return Math.max(leftHeight, rightHeight);
+  }
+
+  isBST() {
+    // use dfsInOrder() to traverse the tree
+    const values = this.dfsInOrder();
+
+    // check if the array returned by the in-order DFS is a sorted array
+    for (let i = 1; i < values.length; i++) {
+      // compare the current and previous values
+      if (values[i] < values[i - 1]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  findKthLargestValue(k) {
+    // use existing dfsInOrder() method to traverse the BST
+    const values = this.dfsInOrder();
+    const kthIndex = values.length - k;
+
+    // ensure the index is within the bounds of the array
+    if (kthIndex >= 0) {
+      return values[kthIndex];
+    } else {
+      console.error("k value exceeds the size of the array");
+    }
+  }
 }
